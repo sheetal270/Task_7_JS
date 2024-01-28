@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Picker</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-size: 30px;
+            background: url('https://assets-global.website-files.com/6009ec8cda7f305645c9d91b/60108d2e18c2b768b667619e_6002086f72b72792a701d13c_color-picker.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: black;
+            background-color: #f0f0f0;
+        }
+
+        #colorPicker {
+
+            margin-bottom: 40px;
+        }
+
+        #hexCode {
+            font-size: 30px;
+            margin-bottom: 10px;
+
+        }
+        
+        header {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 90px;
+        }
+
+        #rgbValues {
+            font-size: 30px;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #232323;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<header>Color Picker By Using Javascript</header>
+
+<input type="color" style="width:100px;height: 50px;" id="colorPicker" onchange="updateValues()">
+<div id="hexCode">Hex Code: #000000</div>
+<div id="rgbValues">RGB Values: (0, 0, 0)</div>
+
+<footer>
+    Developed by: Sheetal Pisal
+</footer>
+<script>
+    function updateValues() {
+        const colorPicker = document.getElementById('colorPicker');
+        const hexCodeElement = document.getElementById('hexCode');
+        const rgbValuesElement = document.getElementById('rgbValues');
+        const selectedColor = colorPicker.value;
+
+        hexCodeElement.textContent = `Hex Code: ${selectedColor}`;
+
+        const rgbValues = hexToRgb(selectedColor);
+        rgbValuesElement.textContent = `RGB Values: (${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b})`;
+    }
+
+    function hexToRgb(hex) {
+        // Remove the leading # if it exists
+        hex = hex.replace(/^#/, '');
+
+        // Parse the hexadecimal values to integers
+        const bigint = parseInt(hex, 16);
+
+        // Extract RGB components
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+
+        return { r, g, b };
+    }
+</script>
+
+</body>
+</html>
