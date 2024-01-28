@@ -3,47 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Color Picker</title>
+    <title>Traditional Clock with Selected Roman Numerals</title>
     <style>
         body {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             margin: 0;
-            font-size: 30px;
-            background: url('https://assets-global.website-files.com/6009ec8cda7f305645c9d91b/60108d2e18c2b768b667619e_6002086f72b72792a701d13c_color-picker.jpeg') no-repeat center center fixed;
-            background-size: cover;
-            color: black;
-            background-color: #f0f0f0;
+            background: linear-gradient(to bottom right, #4e54c8, #8f94fb);
         }
 
-        #colorPicker {
-
-            margin-bottom: 40px;
-        }
-
-        #hexCode {
+header {
+            top: 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
             font-size: 30px;
-            margin-bottom: 10px;
-
+            background-color: #232323;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            
         }
         
-        header {
-            margin-top: 10px;
-            text-align: center;
-            font-size: 36px;
-            margin-bottom: 90px;
+  #clock {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            border: 5px solid #333;
+            border-radius: 50%;
+            margin: 10px;
+            background: linear-gradient(to bottom right, #fff, #e0e0e0);
+            background-size: 100% 100%;
+            font-family: 'Arial', sans-serif;
         }
 
-        #rgbValues {
-            font-size: 30px;
+        .numeral {
+            position: absolute;
+            font-size: 25px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .numeral.XII { top: 12%; left: 50%; transform: translate(-50%, -130%); }
+        .numeral.III { bottom: 50%; right: 7%; transform: translate(50%, 0);}
+        .numeral.VI { bottom: 3%; left: 50%; transform: translate(-50%, 0);  }
+        .numeral.IX {  bottom: 46%; left: 7%; transform: translate(-50%, -50%); }
+
+        .hand {
+            position: absolute;
+            width: 2px;
+            height: 50px;
+            background-color: #333;
+            top: 50%;
+            left: 50%;
+            border: 1px solid;
+            transform-origin: 50% 100%;
+            transform: translateX(-50%);
+        }
+
+        #hourHand {
+            height: 60px;
+        }
+
+        #minuteHand {
+            height: 80px;
+        }
+
+        #secondHand {
+            background-color: red;
+            height: 60px;
         }
         footer {
             position: fixed;
             bottom: 0;
             width: 100%;
+            font-size: 24px;
             background-color: #232323;
             padding: 10px;
             text-align: center;
@@ -52,42 +89,45 @@
     </style>
 </head>
 <body>
-<header>Color Picker By Using Javascript</header>
-
-<input type="color" style="width:100px;height: 50px;" id="colorPicker" onchange="updateValues()">
-<div id="hexCode">Hex Code: #000000</div>
-<div id="rgbValues">RGB Values: (0, 0, 0)</div>
+<header>Antique Clock</header>
+<div id="clock">
+    <div class="numeral XII">XII</div>
+    <div class="numeral III">III</div>
+    <div class="numeral VI">VI</div>
+    <div class="numeral IX">IX</div>
+    <div class="hand" id="hourHand"></div>
+    <div class="hand" id="minuteHand"></div>
+    <div class="hand" id="secondHand"></div>
+</div>
 
 <footer>
     Developed by: Sheetal Pisal
 </footer>
 <script>
-    function updateValues() {
-        const colorPicker = document.getElementById('colorPicker');
-        const hexCodeElement = document.getElementById('hexCode');
-        const rgbValuesElement = document.getElementById('rgbValues');
-        const selectedColor = colorPicker.value;
+    function updateClock() {
+        const hourHand = document.getElementById('hourHand');
+        const minuteHand = document.getElementById('minuteHand');
+        const secondHand = document.getElementById('secondHand');
 
-        hexCodeElement.textContent = `Hex Code: ${selectedColor}`;
+        const now = new Date();
+        const hours = now.getHours() % 12; // Convert to 12-hour format
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
 
-        const rgbValues = hexToRgb(selectedColor);
-        rgbValuesElement.textContent = `RGB Values: (${rgbValues.r}, ${rgbValues.g}, ${rgbValues.b})`;
+        const hourRotation = (hours + minutes / 60) * 360 / 12;
+        const minuteRotation = (minutes + seconds / 60) * 360 / 60;
+        const secondRotation = seconds * 360 / 60;
+
+        hourHand.style.transform = `translate(-50%, -100%) rotate(${hourRotation}deg)`;
+        minuteHand.style.transform = `translate(-50%, -100%) rotate(${minuteRotation}deg)`;
+        secondHand.style.transform = `translate(-50%, -100%) rotate(${secondRotation}deg)`;
     }
 
-    function hexToRgb(hex) {
-        // Remove the leading # if it exists
-        hex = hex.replace(/^#/, '');
+    // Update the clock every second
+    setInterval(updateClock, 1000);
 
-        // Parse the hexadecimal values to integers
-        const bigint = parseInt(hex, 16);
-
-        // Extract RGB components
-        const r = (bigint >> 16) & 255;
-        const g = (bigint >> 8) & 255;
-        const b = bigint & 255;
-
-        return { r, g, b };
-    }
+    // Initial call to set the initial time
+    updateClock();
 </script>
 
 </body>
